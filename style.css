@@ -1,22 +1,58 @@
-body {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
-    background: #111;
+}
+
+body {
+    background: #0f172a;
     color: white;
-    text-align: center;
-    padding: 30px;
+    min-height: 100vh;
 }
 
-h1 {
-    font-size: 35px;
-}
-
-.crypto-box {
-    margin-top: 30px;
-    background: #222;
+header {
+    background: #111827;
     padding: 20px;
-    border-radius: 15px;
+    text-align: center;
+    border-bottom: 1px solid #334155;
 }
 
-h2 {
-    padding: 15px;
+header h1 {
+    font-size: 32px;
+    color: #f59e0b;
+}
+
+.crypto-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.coin-card {
+    background: #1e293b;
+    width: 280px;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.coin-card h2 {
+    margin-bottom: 15px;
+    color: #38bdf8;
+}
+
+.coin-card p {
+    font-size: 22px;
+    color: #22c55e;
+}
+
+footer {
+    margin-top: 50px;
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
 }
