@@ -1,44 +1,20 @@
-async function loadPrices() {
+async function getCryptoData() {
     try {
-        const response = await fetch("https://api.coincap.io/v2/assets?ids=bitcoin,ethereum");
-        const result = await response.json();
+        let response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd"
+        );
 
-        document.getElementById("btc-price").innerText =
-            "$" + Number(result.data[0].priceUsd).toFixed(2);
+        let data = await response.json();
 
-        document.getElementById("eth-price").innerText =
-            "$" + Number(result.data[1].priceUsd).toFixed(2);
+        document.getElementById("bitcoin").innerHTML =
+        "Bitcoin: $" + data.bitcoin.usd;
 
-    } catch (error) {
+        document.getElementById("ethereum").innerHTML =
+        "Ethereum: $" + data.ethereum.usd;
+
+    } catch(error) {
         console.log(error);
     }
 }
 
-async function searchCoin() {
-
-    let coin = document.getElementById("coin-input").value.toLowerCase().trim();
-
-    if (coin === "") {
-        alert("Please enter a coin name");
-        return;
-    }
-
-    try {
-
-        const response = await fetch("https://api.coincap.io/v2/assets/" + coin);
-        const result = await response.json();
-
-        document.getElementById("coin-name").innerText = result.data.name;
-        document.getElementById("coin-price").innerText =
-            "$" + Number(result.data.priceUsd).toFixed(2);
-
-    } catch (error) {
-
-        document.getElementById("coin-name").innerText = "Coin Not Found";
-        document.getElementById("coin-price").innerText = "Try: bitcoin, ethereum, solana";
-
-    }
-}
-
-loadPrices();
-setInterval(loadPrices, 30000);
+getCryptoData();
