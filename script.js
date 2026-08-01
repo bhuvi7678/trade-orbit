@@ -1,29 +1,21 @@
-const coins = ["bitcoin", "ethereum"];
-
 async function getCryptoData() {
+    try {
+        const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd"
+        );
 
-    for (let coin of coins) {
+        const data = await response.json();
 
-        try {
+        document.getElementById("bitcoin").innerHTML =
+            "Bitcoin: $" + data.bitcoin.usd;
 
-            const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd`;
+        document.getElementById("ethereum").innerHTML =
+            "Ethereum: $" + data.ethereum.usd;
 
-            const response = await fetch(url);
-
-            const data = await response.json();
-
-            console.log(data);
-
-            document.getElementById(coin).innerHTML =
-                `${coin.toUpperCase()}: $${data[coin].usd}`;
-
-        } catch (error) {
-
-            console.log("Error:", error);
-
-            document.getElementById(coin).innerHTML =
-                "API Error";
-        }
+    } catch (error) {
+        console.log(error);
+        document.getElementById("bitcoin").innerHTML = "Bitcoin Error";
+        document.getElementById("ethereum").innerHTML = "Ethereum Error";
     }
 }
 
