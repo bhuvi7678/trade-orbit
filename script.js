@@ -26,3 +26,4 @@ fetchPrices();
 
 // Auto update every 10 seconds
 setInterval(fetchPrices, 10000);
+console.log("Script loaded");
