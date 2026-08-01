@@ -26,7 +26,7 @@ function updatePrice(id, newPrice) {
 
 function fetchPrices() {
 
-  fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana&vs_currencies=usd")
+  fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana&vs_currencies=usd&include_24hr_change=true")
 
   .then(response => response.json())
 
@@ -54,7 +54,9 @@ function fetchPrices() {
 fetchPrices();
 
 
-// Auto update every 10 seconds
-setInterval(fetchPrices, 10000);
+// Auto update every 05 seconds
+setInterval(fetchPrices, 5000);
 
 console.log("Script loaded");
+document.getElementById("bitcoin-change").innerHTML =
+"24h: " + data.bitcoin.usd_24h_change.toFixed(2) + "%";
