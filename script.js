@@ -1,36 +1,24 @@
-async function loadCrypto() {
-    try {
+async function getCryptoPrice() {
+  try {
+    const response = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd"
+    );
 
-        const response = await fetch(
-            "https://api.coincap.io/v2/assets?ids=bitcoin,ethereum"
-        );
+    const data = await response.json();
 
-        const result = await response.json();
+    document.getElementById("bitcoin").innerHTML =
+      "$" + data.bitcoin.usd;
 
-        const bitcoin = result.data[0];
-        const ethereum = result.data[1];
+    document.getElementById("ethereum").innerHTML =
+      "$" + data.ethereum.usd;
 
-
-        document.getElementById("bitcoin").innerHTML =
-        "₿ Bitcoin: $" + Number(bitcoin.priceUsd).toFixed(2);
-
-
-        document.getElementById("ethereum").innerHTML =
-        "Ξ Ethereum: $" + Number(ethereum.priceUsd).toFixed(2);
-
-
-    } catch(error) {
-
-        document.getElementById("bitcoin").innerHTML =
-        "Bitcoin API Error";
-
-        document.getElementById("ethereum").innerHTML =
-        "Ethereum API Error";
-
-    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
+// first load
+getCryptoPrice();
 
-loadCrypto();
-
-setInterval(loadCrypto, 30000);
+// update every 10 seconds
+setInterval(getCryptoPrice, 10000);
