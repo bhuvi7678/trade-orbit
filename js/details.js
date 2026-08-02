@@ -1,3 +1,4 @@
+console.log("DETAILS JS LOADED");
 // =========================
 // Trade Orbit V6 - details.js
 // =========================
