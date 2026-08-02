@@ -1,13 +1,9 @@
-// =========================
-// Trade Orbit - indicators.js
-// =========================
-
 function addEMA(chart, candleData){
 
-    console.log("EMA START", candleData);
+    console.log("EMA START", candleData.length);
 
 
-    let emaLine = chart.addSeries(
+    const emaLine = chart.addSeries(
         LightweightCharts.LineSeries,
         {
             lineWidth: 2
@@ -15,7 +11,7 @@ function addEMA(chart, candleData){
     );
 
 
-    let emaData = candleData.map((candle)=>{
+    const emaData = candleData.map(candle => {
 
         return {
             time: candle.time,
