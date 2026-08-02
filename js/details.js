@@ -50,7 +50,9 @@ function openCoinDetails(coin){
 
 
 // Fetch Candlestick Data
-async function loadCandlestickData(id){
+async function loadCandlestickData(coinId){
+   ...
+}
 
     try{
 
