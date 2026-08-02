@@ -11,7 +11,7 @@ function renderCoins(coins) {
     container.innerHTML = "";
 
 
-    coins.forEach(coin => {
+    coins.slice(0, 20).forEach(coin => {
 
         const changeClass =
             coin.price_change_percentage_24h >= 0
