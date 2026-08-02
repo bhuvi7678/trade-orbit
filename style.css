@@ -216,3 +216,12 @@ width:95%;
 }
 
 }
+/* Sparkline Chart */
+
+.sparkline{
+
+    width:100%;
+    height:80px;
+    margin-top:15px;
+
+}
