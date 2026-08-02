@@ -3,7 +3,7 @@
 // Part 1/4
 // =========================
 
-console.log("CHART.JS LOADED");
+console.log("CHART FILE START");
 
 // Sparkline Charts
 const sparklineCharts = {};
