@@ -1,75 +1,218 @@
+/* ==========================
+   Trade Orbit V3
+========================== */
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
     background:#0f172a;
-    color:white;
-    padding:30px;
+    color:#fff;
 }
 
+/* Header */
+
+header{
+    background:#111827;
+    padding:25px;
+    text-align:center;
+    border-bottom:1px solid #1e293b;
+}
+
+header h1{
+    color:#f59e0b;
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.tagline{
+    color:#94a3b8;
+    margin-bottom:20px;
+    font-size:15px;
+}
+
+#search{
+    width:320px;
+    max-width:90%;
+    padding:12px 18px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    font-size:16px;
+}
+
+/* Coin Cards */
+
 .crypto-container{
+
     display:flex;
+
     justify-content:center;
+
+    gap:25px;
+
     flex-wrap:wrap;
-    gap:20px;
+
+    padding:40px 20px;
+
 }
 
 .coin-card{
-    width:260px;
+
+    width:280px;
+
     background:#1e293b;
-    border-radius:15px;
-    padding:20px;
+
+    border-radius:18px;
+
+    padding:25px;
+
     text-align:center;
-    box-shadow:0 5px 15px rgba(0,0,0,.35);
+
     transition:.3s;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.35);
+
 }
 
 .coin-card:hover{
-    transform:translateY(-5px);
+
+    transform:translateY(-8px);
+
+}
+
+.coin-logo{
+
+    width:70px;
+
+    height:70px;
+
+    object-fit:contain;
+
+    margin-bottom:15px;
+
 }
 
 .coin-card h2{
-    color:#38bdf8;
-    margin-bottom:15px;
-}
 
-.coin-card p{
-    margin:8px 0;
+    color:#38bdf8;
+
+    margin-bottom:15px;
+
 }
 
 .price{
-    font-size:24px;
+
+    font-size:28px;
+
     font-weight:bold;
-}
 
-.price-up{
-    color:#22c55e;
-}
+    margin-bottom:12px;
 
-.price-down{
-    color:#ef4444;
 }
 
 .change{
-    font-size:16px;
+
+    font-size:18px;
+
     font-weight:bold;
+
+    margin-bottom:15px;
+
+}
+
+.coin-card p{
+
+    margin:8px 0;
+
+    font-size:15px;
+
+}
+
+/* Price */
+
+.price-up{
+
+    color:#22c55e;
+
+}
+
+.price-down{
+
+    color:#ef4444;
+
 }
 
 .positive{
+
     color:#22c55e;
+
 }
 
 .negative{
+
     color:#ef4444;
+
 }
 
-.update-time{
-    margin-top:30px;
+/* Update */
+
+.update-box{
+
     text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+#update-time{
+
     color:#94a3b8;
-    font-size:14px;
+
+    font-size:15px;
+
+}
+
+/* Footer */
+
+footer{
+
+    background:#111827;
+
+    padding:20px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    margin-top:40px;
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+header h1{
+
+font-size:30px;
+
+}
+
+.coin-card{
+
+width:95%;
+
+}
+
+#search{
+
+width:95%;
+
+}
+
 }

@@ -1,84 +1,145 @@
+// =========================
+// Trade Orbit V3
+// =========================
+
 let oldPrices = {};
 
-function updatePrice(id, price){
+const coinIds = [
+  "bitcoin",
+  "ethereum",
+  "binancecoin",
+  "solana"
+];
 
-    const el = document.getElementById(id);
+function formatMarketCap(value) {
+  if (value >= 1e12) {
+    return "$" + (value / 1e12).toFixed(2) + " T";
+  }
+  if (value >= 1e9) {
+    return "$" + (value / 1e9).toFixed(2) + " B";
+  }
+  if (value >= 1e6) {
+    return "$" + (value / 1e6).toFixed(2) + " M";
+  }
+  return "$" + value.toLocaleString();
+}
 
-    let arrow = "";
+function updatePrice(id, price) {
 
-    if(oldPrices[id] !== undefined){
+  const element = document.getElementById(id);
 
-        if(price > oldPrices[id]){
-            arrow = " ↑";
-            el.className = "price price-up";
-        }
+  let arrow = "";
 
-        else if(price < oldPrices[id]){
-            arrow = " ↓";
-            el.className = "price price-down";
-        }
+  if (oldPrices[id] !== undefined) {
 
-        else{
-            el.className = "price";
-        }
-
-    }else{
-        el.className = "price";
+    if (price > oldPrices[id]) {
+      arrow = " ↑";
+      element.className = "price price-up";
+    } else if (price < oldPrices[id]) {
+      arrow = " ↓";
+      element.className = "price price-down";
+    } else {
+      element.className = "price";
     }
 
-    el.innerHTML = "$" + Number(price).toLocaleString() + arrow;
+  } else {
+    element.className = "price";
+  }
 
-    oldPrices[id] = price;
+  element.innerHTML = "$" + price.toLocaleString() + arrow;
+
+  oldPrices[id] = price;
+}
+
+function updateChange(id, change) {
+
+  const element = document.getElementById(id);
+
+  if (change >= 0) {
+    element.className = "change positive";
+    element.innerHTML = "24H : +" + change.toFixed(2) + "%";
+  } else {
+    element.className = "change negative";
+    element.innerHTML = "24H : " + change.toFixed(2) + "%";
+  }
 
 }
 
-function updateChange(id, change){
+function fetchPrices() {
 
-    const el = document.getElementById(id);
+  fetch(
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" +
+      coinIds.join(",")
+  )
+    .then((response) => response.json())
+    .then((data) => {
 
-    const value = Number(change).toFixed(2);
+      data.forEach((coin) => {
 
-    if(change >= 0){
-        el.className = "change positive";
-        el.innerHTML = "24H : +" + value + "%";
-    }else{
-        el.className = "change negative";
-        el.innerHTML = "24H : " + value + "%";
-    }
+        let id = coin.id;
 
-}
+        if (id === "binancecoin") {
+          id = "bnb";
+        }
 
-function fetchPrices(){
+        updatePrice(id, coin.current_price);
 
-fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana&vs_currencies=usd&include_24hr_change=true")
+        updateChange(id + "-change", coin.price_change_percentage_24h);
 
-.then(response=>response.json())
+        document.getElementById(id + "-logo").src = coin.image;
 
-.then(data=>{
+        document.getElementById(id + "-high").innerHTML =
+          "📈 High : $" + coin.high_24h.toLocaleString();
 
-updatePrice("bitcoin",data.bitcoin.usd);
-updatePrice("ethereum",data.ethereum.usd);
-updatePrice("bnb",data.binancecoin.usd);
-updatePrice("solana",data.solana.usd);
+        document.getElementById(id + "-low").innerHTML =
+          "📉 Low : $" + coin.low_24h.toLocaleString();
 
-updateChange("bitcoin-change",data.bitcoin.usd_24h_change);
-updateChange("ethereum-change",data.ethereum.usd_24h_change);
-updateChange("bnb-change",data.binancecoin.usd_24h_change);
-updateChange("solana-change",data.solana.usd_24h_change);
+        document.getElementById(id + "-marketcap").innerHTML =
+          "💰 Market Cap : " +
+          formatMarketCap(coin.market_cap);
 
-document.getElementById("update-time").innerHTML =
-"Last Updated : " + new Date().toLocaleTimeString();
+        document.getElementById(id + "-rank").innerHTML =
+          "🏆 Rank : #" + coin.market_cap_rank;
 
-})
+      });
 
-.catch(error=>{
+      document.getElementById("update-time").innerHTML =
+        "🕒 Last Updated : " +
+        new Date().toLocaleTimeString();
 
-console.log(error);
-
-});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
 }
 
 fetchPrices();
 
-setInterval(fetchPrices,5000);
+setInterval(fetchPrices, 5000);
+
+// =========================
+// Search
+// =========================
+
+const search = document.getElementById("search");
+
+search.addEventListener("keyup", function () {
+
+  const value = this.value.toLowerCase();
+
+  const cards = document.querySelectorAll(".coin-card");
+
+  cards.forEach((card) => {
+
+    const name = card.querySelector("h2").innerText.toLowerCase();
+
+    if (name.includes(value)) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+
+  });
+
+});
