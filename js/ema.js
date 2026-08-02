@@ -1,7 +1,7 @@
 // =========================
 // Trade Orbit V7 - ema.js
 // =========================
-
+console.log("EMA FILE START");
 console.log("EMA.JS LOADED");
 
 
