@@ -225,3 +225,41 @@ width:95%;
     margin-top:15px;
 
 }
+/* ==========================
+   Market Overview
+========================== */
+
+.market-overview{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+    padding:25px 20px;
+}
+
+.overview-card{
+    background:#1e293b;
+    width:250px;
+    padding:20px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+    border:1px solid #334155;
+    transition:.3s;
+}
+
+.overview-card:hover{
+    transform:translateY(-5px);
+}
+
+.overview-card h3{
+    color:#f59e0b;
+    margin-bottom:12px;
+    font-size:18px;
+}
+
+.overview-card p{
+    font-size:22px;
+    font-weight:bold;
+    color:#ffffff;
+}
