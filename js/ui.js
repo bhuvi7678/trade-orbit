@@ -77,6 +77,22 @@ function renderCoins(coins) {
 
         `;
 
+        // Sparkline Chart
+
+let chartData = coin.sparkline_in_7d.price;
+
+let min = Math.min(...chartData);
+let max = Math.max(...chartData);
+
+let points = chartData.map((price, index) => {
+
+    let x = (index / (chartData.length - 1)) * 100;
+
+    let y = 100 - ((price - min) / (max - min)) * 100;
+
+    return `${x},${y}`;
+
+}).join(" ");
 
         container.appendChild(card);
 
