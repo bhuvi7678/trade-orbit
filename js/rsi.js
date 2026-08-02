@@ -1,7 +1,7 @@
 // =========================
 // Trade Orbit V7 - rsi.js
 // =========================
-
+console.log("RSI FILE START");
 console.log("RSI.JS LOADED");
 
 let rsiSeries = null;
