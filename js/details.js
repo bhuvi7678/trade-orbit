@@ -8,9 +8,7 @@ async function loadCandlestickData(id){
 
 
         const ohlc = await response.json();
-
-
-        console.log("OHLC DATA:", ohlc);
+     console.log("OHLC DATA:", ohlc);
 
 
         if(!Array.isArray(ohlc) || ohlc.length === 0){
