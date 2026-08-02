@@ -89,8 +89,13 @@ function createSparkline(canvasId, prices) {
 // Part 2/4
 // =========================
 
-function createCandlestickChart(data) {
+candleSeries.setData(currentCandleData);
 
+// Draw EMA
+addEMA(candleChart, currentCandleData);
+
+// Draw RSI
+addRSI(currentCandleData);
     const container =
         document.getElementById("candlestick-chart");
 
