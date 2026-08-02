@@ -5,30 +5,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trade Orbit | Live Crypto Dashboard</title>
+
   <link rel="stylesheet" href="style.css">
-  </head>
+</head>
+
 <body>
 
-<header>
-</header>
+  <!-- Header -->
+  <header>
 
-<div class="crypto-container" id="crypto-container"></div>
+    <h1>🚀 Trade Orbit</h1>
 
-<div class="update-box">
-  <p id="update-time">Last Updated : --</p>
-</div>
+    <p class="tagline">
+      Live Cryptocurrency Market Dashboard
+    </p>
 
-<footer>
-  <p>© 2026 Trade Orbit | Live Crypto Market</p>
-</footer>
+    <input
+      type="text"
+      id="search"
+      placeholder="🔍 Search Coin..."
+    >
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </header>
 
-<script src="js/api.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/search.js"></script>
-<script src="js/market.js"></script>
-<script src="js/app.js"></script>
+  <!-- Coins -->
+  <div class="crypto-container" id="crypto-container"></div>
+
+  <!-- Last Update -->
+  <div class="update-box">
+
+    <p id="update-time">
+      Last Updated : --
+    </p>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+
+    <p>
+      © 2026 Trade Orbit | Live Crypto Market
+    </p>
+
+  </footer>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- JS Files -->
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/market.js"></script>
+  <script src="js/app.js"></script>
 
 </body>
+
 </html>
