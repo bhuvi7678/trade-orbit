@@ -16,6 +16,14 @@ function openCoinDetails(coin){
     if(!modal) return;
 
 
+    modal.style.display = "flex";
+
+
+    loadCandlestickData(coin.id);
+
+}
+
+
     document.getElementById("detail-name").innerHTML =
         coin.name + " (" + coin.symbol.toUpperCase() + ")";
 
