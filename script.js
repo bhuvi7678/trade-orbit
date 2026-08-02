@@ -143,3 +143,56 @@ search.addEventListener("keyup", function () {
   });
 
 });
+// =========================
+// Sparkline Chart
+// =========================
+
+const sparkCharts = {};
+
+function updateSparkline(id, prices) {
+
+  const canvas = document.getElementById(id + "-chart");
+
+  if (!canvas) return;
+
+  if (!sparkCharts[id]) {
+
+    sparkCharts[id] = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: prices.map(() => ""),
+        datasets: [{
+          data: prices,
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.4,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            display: false
+          },
+          y: {
+            display: false
+          }
+        }
+      }
+    });
+
+  } else {
+
+    sparkCharts[id].data.labels = prices.map(() => "");
+    sparkCharts[id].data.datasets[0].data = prices;
+    sparkCharts[id].update();
+
+  }
+
+}
