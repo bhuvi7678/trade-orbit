@@ -1,100 +1,33 @@
 // =========================
-// Trade Orbit V6 - indicators.js
+// Trade Orbit - indicators.js
 // =========================
-
-
-// Calculate EMA
-
-function calculateEMA(data, period){
-
-    let ema = [];
-
-    let multiplier = 2 / (period + 1);
-
-
-    let previousEMA = data[0].close;
-
-
-    data.forEach((candle, index)=>{
-
-
-        if(index === 0){
-
-            ema.push({
-                time:candle.time,
-                value:previousEMA
-            });
-
-        }
-        else{
-
-            let currentEMA =
-            (candle.close - previousEMA) * multiplier
-            + previousEMA;
-
-
-            previousEMA = currentEMA;
-
-
-            ema.push({
-
-                time:candle.time,
-
-                value:currentEMA
-
-            });
-
-        }
-
-
-    });
-
-
-    return ema;
-
-}
-
-
-// Add EMA Lines
 
 function addEMA(chart, candleData){
 
-    console.log("EMA Function Running", candleData.length);
-        
+    console.log("EMA START", candleData);
 
 
-    const ema9 =
-    chart.addLineSeries({
-        lineWidth:2
-    });
-
-
-    const ema20 =
-    chart.addLineSeries({
-        lineWidth:2
-    });
-
-
-    const ema200 =
-    chart.addLineSeries({
-        lineWidth:2
-    });
-
-
-
-    ema9.setData(
-        calculateEMA(candleData,9)
+    let emaLine = chart.addSeries(
+        LightweightCharts.LineSeries,
+        {
+            lineWidth: 2
+        }
     );
 
 
-    ema20.setData(
-        calculateEMA(candleData,20)
-    );
+    let emaData = candleData.map((candle)=>{
+
+        return {
+            time: candle.time,
+            value: candle.close
+        };
+
+    });
 
 
-    ema200.setData(
-        calculateEMA(candleData,200)
-    );
+    console.log("EMA DATA", emaData);
 
+
+    emaLine.setData(emaData);
 
 }
