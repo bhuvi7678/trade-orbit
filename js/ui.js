@@ -23,6 +23,7 @@ function renderCoins(coins) {
 
         card.className = "coin-card";
         card.onclick = () => openCoinDetails(coin);
+        console.log("CLICK READY:", coin.name);
 
 
         card.innerHTML = `<div class="coin-info">
