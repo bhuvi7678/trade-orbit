@@ -125,10 +125,10 @@ function createCandlestickChart(data){
     });
 
 
-
-    candleSeries =
-    candleChart.addCandlestickSeries();
-
+    
+candleSeries = candleChart.addSeries(
+    LightweightCharts.CandlestickSeries
+);
 
 
     candleSeries.setData(data);
