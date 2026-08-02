@@ -1,62 +1,84 @@
 let oldPrices = {};
 
-function updatePrice(id, newPrice) {
-  let element = document.getElementById(id);
+function updatePrice(id, price){
 
-  if (oldPrices[id]) {
-    if (newPrice > oldPrices[id]) {
-      element.className = "price-up";
-      element.innerHTML = "$" + newPrice + " ↑";
-    } 
-    else if (newPrice < oldPrices[id]) {
-      element.className = "price-down";
-      element.innerHTML = "$" + newPrice + " ↓";
+    const el = document.getElementById(id);
+
+    let arrow = "";
+
+    if(oldPrices[id] !== undefined){
+
+        if(price > oldPrices[id]){
+            arrow = " ↑";
+            el.className = "price price-up";
+        }
+
+        else if(price < oldPrices[id]){
+            arrow = " ↓";
+            el.className = "price price-down";
+        }
+
+        else{
+            el.className = "price";
+        }
+
+    }else{
+        el.className = "price";
     }
-    else {
-      element.innerHTML = "$" + newPrice;
-    }
-  } 
-  else {
-    element.innerHTML = "$" + newPrice;
-  }
 
-  oldPrices[id] = newPrice;
-}
+    el.innerHTML = "$" + Number(price).toLocaleString() + arrow;
 
-
-function fetchPrices() {
-
-  fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana&vs_currencies=usd&include_24hr_change=true")
-
-  .then(response => response.json())
-
-  .then(data => {
-
-    updatePrice("bitcoin", data.bitcoin.usd);
-    updatePrice("ethereum", data.ethereum.usd);
-    updatePrice("bnb", data.binancecoin.usd);
-    updatePrice("solana", data.solana.usd);
-
-
-    document.getElementById("update-time").innerHTML =
-    "Last Update: " + new Date().toLocaleTimeString();
-
-  })
-
-  .catch(error => {
-    console.log("Price Error:", error);
-  });
+    oldPrices[id] = price;
 
 }
 
+function updateChange(id, change){
 
-// First load
+    const el = document.getElementById(id);
+
+    const value = Number(change).toFixed(2);
+
+    if(change >= 0){
+        el.className = "change positive";
+        el.innerHTML = "24H : +" + value + "%";
+    }else{
+        el.className = "change negative";
+        el.innerHTML = "24H : " + value + "%";
+    }
+
+}
+
+function fetchPrices(){
+
+fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana&vs_currencies=usd&include_24hr_change=true")
+
+.then(response=>response.json())
+
+.then(data=>{
+
+updatePrice("bitcoin",data.bitcoin.usd);
+updatePrice("ethereum",data.ethereum.usd);
+updatePrice("bnb",data.binancecoin.usd);
+updatePrice("solana",data.solana.usd);
+
+updateChange("bitcoin-change",data.bitcoin.usd_24h_change);
+updateChange("ethereum-change",data.ethereum.usd_24h_change);
+updateChange("bnb-change",data.binancecoin.usd_24h_change);
+updateChange("solana-change",data.solana.usd_24h_change);
+
+document.getElementById("update-time").innerHTML =
+"Last Updated : " + new Date().toLocaleTimeString();
+
+})
+
+.catch(error=>{
+
+console.log(error);
+
+});
+
+}
+
 fetchPrices();
 
-
-// Auto update every 05 seconds
-setInterval(fetchPrices, 5000);
-
-console.log("Script loaded");
-document.getElementById("bitcoin-change").innerHTML =
-"24h: " + data.bitcoin.usd_24h_change.toFixed(2) + "%";
+setInterval(fetchPrices,5000);
