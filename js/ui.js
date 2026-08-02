@@ -24,7 +24,11 @@ function renderCoins(coins) {
         card.className = "coin-card";
 
 
-        card.innerHTML = `
+        card.innerHTML = `<div class="coin-info">
+
+<p>
+🏆 Rank : #${coin.market_cap_rank}
+</p>
 
             <img 
             class="coin-logo"
