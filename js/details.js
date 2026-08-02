@@ -9,34 +9,7 @@ console.log("DETAILS JS LOADED");
 let selectedCoin = null;
 
 
-// Open Coin Details
-// Load chart first time
-loadCandlestickData(coin.id);
-// Stop old interval
-if (chartRefreshInterval) {
-    clearInterval(chartRefreshInterval);
-}
-
-// Refresh every 15 seconds
-chartRefreshInterval = setInterval(() => {
-    if (selectedCoin) {
-        loadCandlestickData(selectedCoin.id);
-    }
-}, 15000);
-
-}
-
-// Stop old interval
-if (chartRefreshInterval) {
-    clearInterval(chartRefreshInterval);
-}
-
-// Refresh chart every 15 seconds
-chartRefreshInterval = setInterval(() => {
-    if (selectedCoin) {
-        loadCandlestickData(selectedCoin.id);
-    }
-}, 15000);
+loadCandlestickData(coin.id) 
 function openCoinDetails(coin){
 
     selectedCoin = coin;
