@@ -59,6 +59,9 @@ function calculateEMA(data, period){
 
 function addEMA(chart, candleData){
 
+    console.log("EMA Function Running", candleData.length);
+        
+
 
     const ema9 =
     chart.addLineSeries({
