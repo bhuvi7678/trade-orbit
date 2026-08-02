@@ -1,3 +1,5 @@
+let selectedCoin = null;
+let chartRefreshInterval = null;
 console.log("DETAILS JS LOADED");
 
 // =========================
