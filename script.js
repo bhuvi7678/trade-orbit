@@ -100,6 +100,7 @@ function fetchPrices() {
 
         document.getElementById(id + "-rank").innerHTML =
           "🏆 Rank : #" + coin.market_cap_rank;
+        updateSparkline(id, coin.sparkline_in_7d.price);
 
       });
 
