@@ -87,6 +87,7 @@ async function loadCandlestickData(id){
 
 
         const ohlc = await response.json();
+        console.log(ohlc);
 
 
 
