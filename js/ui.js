@@ -105,6 +105,12 @@ let points = chartData.map((price, index) => {
 `;
 
         container.appendChild(card);
+        if (coin.sparkline_in_7d && coin.sparkline_in_7d.price) {
+    createSparkline(
+        `${coin.id}-chart`,
+        coin.sparkline_in_7d.price
+    );
+        }
 
     });
 
