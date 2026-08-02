@@ -132,6 +132,11 @@ candleSeries = candleChart.addSeries(
 
 
     candleSeries.setData(data);
+    // Add EMA Indicators
+addEMA(
+    candleChart,
+    data
+);
 
 
 
