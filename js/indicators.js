@@ -1,29 +1,88 @@
-function addEMA(chart, candleData){
+// =========================
+// Trade Orbit V6 - indicators.js
+// =========================
 
-    console.log("EMA START", candleData.length);
+function calculateEMA(data, period){
+
+    let ema = [];
+
+    let multiplier = 2 / (period + 1);
+
+    let previousEMA = data[0].close;
 
 
-    const emaLine = chart.addSeries(
-        LightweightCharts.LineSeries,
-        {
-            lineWidth: 2
+    data.forEach((candle, index)=>{
+
+        if(index === 0){
+
+            previousEMA = candle.close;
+
+        } else {
+
+            previousEMA =
+            (candle.close - previousEMA) * multiplier
+            + previousEMA;
+
         }
-    );
 
 
-    const emaData = candleData.map(candle => {
+        ema.push({
 
-        return {
             time: candle.time,
-            value: candle.close
-        };
+            value: previousEMA
+
+        });
+
 
     });
 
 
-    console.log("EMA DATA", emaData);
+    return ema;
+
+}
 
 
-    emaLine.setData(emaData);
+
+function addEMA(chart, candleData){
+
+
+    const ema9 = chart.addSeries(
+        LightweightCharts.LineSeries,
+        {
+            lineWidth:2,
+        }
+    );
+
+
+    const ema20 = chart.addSeries(
+        LightweightCharts.LineSeries,
+        {
+            lineWidth:2,
+        }
+    );
+
+
+    const ema200 = chart.addSeries(
+        LightweightCharts.LineSeries,
+        {
+            lineWidth:2,
+        }
+    );
+
+
+    ema9.setData(
+        calculateEMA(candleData,9)
+    );
+
+
+    ema20.setData(
+        calculateEMA(candleData,20)
+    );
+
+
+    ema200.setData(
+        calculateEMA(candleData,200)
+    );
+
 
 }
