@@ -163,6 +163,7 @@ addRSI(currentCandleData);
     });
 
     candleSeries.setData(currentCandleData);
+console.log("CANDLE DATA:", currentCandleData);
 
     // EMA Lines
     ema9Series = candleChart.addLineSeries({
