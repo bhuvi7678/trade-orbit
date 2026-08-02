@@ -97,6 +97,12 @@ let points = chartData.map((price, index) => {
     return `${x},${y}`;
 
 }).join(" ");
+        card.innerHTML += `
+    <canvas
+        class="sparkline"
+        id="${coin.id}-chart">
+    </canvas>
+`;
 
         container.appendChild(card);
 
