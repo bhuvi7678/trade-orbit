@@ -10,6 +10,20 @@ let selectedCoin = null;
 
 
 // Open Coin Details
+// Load chart first time
+loadCandlestickData(coin.id);
+
+// Stop old interval
+if (chartRefreshInterval) {
+    clearInterval(chartRefreshInterval);
+}
+
+// Refresh chart every 15 seconds
+chartRefreshInterval = setInterval(() => {
+    if (selectedCoin) {
+        loadCandlestickData(selectedCoin.id);
+    }
+}, 15000);
 function openCoinDetails(coin){
 
     selectedCoin = coin;
@@ -102,6 +116,19 @@ async function loadCandlestickData(coinId){
 
 // Close Modal
 function closeCoinDetails(){
+    function closeCoinDetails() {
+
+    const modal = document.getElementById("coin-modal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+    if (chartRefreshInterval) {
+        clearInterval(chartRefreshInterval);
+        chartRefreshInterval = null;
+    }
+    }
 
     const modal = document.getElementById("coin-modal");
 
