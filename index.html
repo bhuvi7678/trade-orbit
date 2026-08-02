@@ -27,133 +27,54 @@
     >
 
   </header>
+<!-- Header -->
+<header>
+
+  <h1>🚀 Trade Orbit</h1>
+
+  <p class="tagline">
+    Live Cryptocurrency Market Dashboard
+  </p>
+
+  <input
+    type="text"
+    id="search"
+    placeholder="🔍 Search Coin..."
+  >
+
+</header>
 
 
-  <!-- Coins -->
-  <div class="crypto-container" id="crypto-container">
+<!-- Coins -->
+<div class="crypto-container" id="crypto-container">
 
-    <!-- Bitcoin -->
-    <div class="coin-card">
-
-      <img id="bitcoin-logo" class="coin-logo">
-
-      <h2>Bitcoin</h2>
-
-      <p id="bitcoin" class="price">Loading...</p>
-      <canvas class="sparkline" id="bitcoin-chart"></canvas>
-
-      <p id="bitcoin-change" class="change"></p>
-
-      <p id="bitcoin-high"></p>
-
-      <p id="bitcoin-low"></p>
-
-      <p id="bitcoin-marketcap"></p>
-
-      <p id="bitcoin-rank"></p>
-
-    </div>
+</div>
 
 
-    <!-- Ethereum -->
-    <div class="coin-card">
+<!-- Last Update -->
+<div class="update-box">
 
-      <img id="ethereum-logo" class="coin-logo">
+  <p id="update-time">
+    Last Updated : --
+  </p>
 
-      <h2>Ethereum</h2>
-
-      <p id="ethereum" class="price">Loading...</p>
-      <canvas class="sparkline" id="ethereum-chart"></canvas>
-
-      <p id="ethereum-change" class="change"></p>
-
-      <p id="ethereum-high"></p>
-
-      <p id="ethereum-low"></p>
-
-      <p id="ethereum-marketcap"></p>
-
-      <p id="ethereum-rank"></p>
-
-    </div>
+</div>
 
 
-    <!-- BNB -->
-    <div class="coin-card">
+<!-- Footer -->
+<footer>
 
-      <img id="bnb-logo" class="coin-logo">
+  <p>
+    © 2026 Trade Orbit | Live Crypto Market
+  </p>
 
-      <h2>BNB</h2>
+</footer>
 
-      <p id="bnb" class="price">Loading...</p>
-      <canvas class="sparkline" id="bnb-chart"></canvas>
-
-      <p id="bnb-change" class="change"></p>
-
-      <p id="bnb-high"></p>
-
-      <p id="bnb-low"></p>
-
-      <p id="bnb-marketcap"></p>
-
-      <p id="bnb-rank"></p>
-
-    </div>
-
-
-    <!-- Solana -->
-    <div class="coin-card">
-
-      <img id="solana-logo" class="coin-logo">
-
-      <h2>Solana</h2>
-
-      <p id="solana" class="price">Loading...</p>
-      
-<canvas class="sparkline" id="solana-chart"></canvas>
-      <p id="solana-change" class="change"></p>
-
-      <p id="solana-high"></p>
-
-      <p id="solana-low"></p>
-
-      <p id="solana-marketcap"></p>
-
-      <p id="solana-rank"></p>
-
-    </div>
-
-  </div>
-
-
-  <!-- Last Update -->
-
-  <div class="update-box">
-
-    <p id="update-time">
-
-      Last Updated : --
-
-    </p>
-
-  </div>
-
-
-  <!-- Footer -->
-
-  <footer>
-
-    <p>
-
-      © 2026 Trade Orbit | Live Crypto Market
-
-    </p>
-
-  </footer>
-
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <script src="js/api.js"></script>
+<!-- JS Files -->
+<script src="js/api.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/search.js"></script>
 <script src="js/market.js"></script>
