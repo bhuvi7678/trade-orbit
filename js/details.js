@@ -1,4 +1,5 @@
 console.log("DETAILS JS LOADED");
+
 // =========================
 // Trade Orbit V6 - details.js
 // =========================
@@ -14,14 +15,6 @@ function openCoinDetails(coin){
     const modal = document.getElementById("coin-modal");
 
     if(!modal) return;
-
-
-    modal.style.display = "flex";
-
-
-    loadCandlestickData(coin.id);
-
-}
 
 
     document.getElementById("detail-name").innerHTML =
@@ -51,7 +44,7 @@ function openCoinDetails(coin){
     modal.style.display = "flex";
 
 
-    // Load Candlestick
+    // Load Candlestick Chart
     loadCandlestickData(coin.id);
 
 }
@@ -60,28 +53,32 @@ function openCoinDetails(coin){
 
 // Fetch Candlestick Data
 async function loadCandlestickData(coinId){
-   ...
-}
 
     try{
 
         const response = await fetch(
-            `https://api.coingecko.com/api/v3/coins/${id}/ohlc?vs_currency=usd&days=7`
+            `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=7`
         );
 
 
         const ohlc = await response.json();
 
+
         console.log("OHLC DATA:", ohlc);
+
 
 
         const candleData = ohlc.map(item => ({
 
             time: Math.floor(item[0] / 1000),
-            open:item[1],
-            high:item[2],
-            low:item[3],
-            close:item[4]
+
+            open: item[1],
+
+            high: item[2],
+
+            low: item[3],
+
+            close: item[4]
 
         }));
 
@@ -93,7 +90,7 @@ async function loadCandlestickData(coinId){
 
     catch(error){
 
-        console.log("Chart Error:",error);
+        console.log("Chart Error:", error);
 
     }
 
@@ -102,14 +99,15 @@ async function loadCandlestickData(coinId){
 
 
 // Close Modal
-
 function closeCoinDetails(){
 
-    const modal =
-    document.getElementById("coin-modal");
+    const modal = document.getElementById("coin-modal");
+
 
     if(modal){
-        modal.style.display="none";
+
+        modal.style.display = "none";
+
     }
 
 }
