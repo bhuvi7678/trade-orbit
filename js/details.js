@@ -37,6 +37,7 @@ function openCoinDetails(coin) {
 
     // First chart load
     loadCandlestickData(coin.id);
+    startLivePrice(coin.id);
 
     // Stop previous refresh
     if (chartRefreshInterval) {
@@ -84,6 +85,7 @@ async function loadCandlestickData(coinId) {
 
 // Close Modal
 function closeCoinDetails() {
+    stopLivePrice();
 
     const modal = document.getElementById("coin-modal");
 
