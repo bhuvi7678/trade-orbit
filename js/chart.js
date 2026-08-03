@@ -85,19 +85,28 @@ function createSparkline(canvasId, prices) {
     });
 
 }
-// =========================
-// Part 2/4
-// =========================
+function createCandlestickChart(data) {
 
-candleSeries.setData(currentCandleData);
+    const container = document.getElementById("candlestick-chart");
+    if (!container) return;
 
-// Draw EMA
-addEMA(candleChart, currentCandleData);
+    currentCandleData = [...data];
 
-// Draw RSI
-addRSI(currentCandleData);
-    const container =
-        document.getElementById("candlestick-chart");
+    if (candleChart) {
+        candleChart.remove();
+    }
+
+    candleChart = LightweightCharts.createChart(container, {
+        width: container.clientWidth,
+        height: 420
+    });
+
+    candleSeries = candleChart.addCandlestickSeries();
+
+    candleSeries.setData(currentCandleData);
+
+    candleChart.timeScale().fitContent();
+}
 
     if (!container) return;
 
