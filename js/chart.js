@@ -27,3 +27,34 @@ function updateCandlestickChart(data){
 }
 function updateLatestCandle(c){ if(candleSeries) candleSeries.update(c);}
 function destroyCandlestickChart(){if(candleChart){candleChart.remove();candleChart=null;} candleSeries=null;currentCandleData=[];}
+// =========================
+// Load Candlestick Data
+// =========================
+
+async function loadCandlestickData(coinId) {
+
+    try {
+
+        const response = await fetch(
+            `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=1`
+        );
+
+        const data = await response.json();
+
+        const candles = data.map(c => ({
+            time: Math.floor(c[0] / 1000),
+            open: c[1],
+            high: c[2],
+            low: c[3],
+            close: c[4]
+        }));
+
+        createCandlestickChart(candles);
+
+    } catch (err) {
+
+        console.error("Chart Error:", err);
+
+    }
+
+}
