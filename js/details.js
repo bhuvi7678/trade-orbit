@@ -13,7 +13,32 @@ function openCoinDetails(coin){
 
     modal.style.display = "flex";
 
-    updateCoinDetails(coin);
+   function updateCoinDetails(coin){
+
+    setValue("detail-name", coin.name);
+    setValue("detail-price", "$" + Number(coin.current_price).toLocaleString());
+
+    setValue(
+        "detail-change",
+        (coin.price_change_percentage_24h || 0).toFixed(2) + "%"
+    );
+
+    setValue(
+        "detail-marketcap",
+        "$" + formatMarketCap(coin.market_cap)
+    );
+
+    setValue(
+        "detail-volume",
+        "$" + Number(coin.total_volume).toLocaleString()
+    );
+
+    setValue(
+        "detail-rank",
+        "#" + coin.market_cap_rank
+    );
+
+   } 
 
     if(typeof loadCandlestickData === "function"){
         loadCandlestickData(coin.id);
