@@ -33,8 +33,7 @@ function destroyCandlestickChart(){if(candleChart){candleChart.remove();candleCh
 // Load Candlestick Data
 // =========================
 
-async function alert("Candles Loaded: " + data.length);
-                          loadCandlestickData(coinId) {
+async function  loadCandlestickData(coinId) {
 
     try {
 
@@ -43,7 +42,8 @@ async function alert("Candles Loaded: " + data.length);
         );
 
         const data = await response.json();
-         console.log("OHLC Data:", data);
+        alert("Candles Loaded: " + data.length);
+     console.log("OHLC Data:", data);
 
         const candles = data.map(c => ({
             time: Math.floor(c[0] / 1000),
