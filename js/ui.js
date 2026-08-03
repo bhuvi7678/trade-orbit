@@ -1,146 +1,69 @@
 // =========================
-// Trade Orbit V4 - ui.js
+// Trade Orbit V8 - ui.js
 // =========================
 
 function renderCoins(coins) {
-
     const container = document.getElementById("crypto-container");
-
     if (!container) return;
 
     container.innerHTML = "";
 
-
-    coins.slice(0, 20).forEach(coin => {
-
-        const changeClass =
-            coin.price_change_percentage_24h >= 0
-            ? "positive"
-            : "negative";
-
+    (coins || []).slice(0,20).forEach((coin)=>{
+        const change = Number(coin.price_change_percentage_24h || 0);
+        const changeClass = change >= 0 ? "positive" : "negative";
 
         const card = document.createElement("div");
-
         card.className = "coin-card";
-        card.onclick = () => openCoinDetails(coin);
-        console.log("CLICK READY:", coin.name);
 
+        card.onclick = () => {
+            if (typeof openCoinDetails === "function") {
+                openCoinDetails(coin);
+            }
+        };
 
-        card.innerHTML = `<div class="coin-info">
-
-<p>
-🏆 Rank : #${coin.market_cap_rank}
-</p>
-
-            <img 
-            class="coin-logo"
-            src="${coin.image}"
-            alt="${coin.name}"
-            >
-
-            <h2 class="coin-name">
-            ${coin.name}
-            </h2>
-
-            <p class="coin-symbol">
-            ${coin.symbol.toUpperCase()}
-            </p>
-
-
-            <p class="price">
-            $${coin.current_price.toLocaleString()}
-            </p>
-
-
-            <p class="change ${changeClass}">
-            24H :
-            ${coin.price_change_percentage_24h.toFixed(2)}%
-            </p>
-
-
+        card.innerHTML = `
             <div class="coin-info">
-
-            <p>
-            🏆 Rank : #${coin.market_cap_rank}
-            </p>
-
-            <p>
-            💰 Market Cap :
-            $${formatMarketCap(coin.market_cap)}
-            </p>
-
-            <p>
-            📈 High :
-            $${coin.high_24h.toLocaleString()}
-            </p>
-
-            <p>
-            📉 Low :
-            $${coin.low_24h.toLocaleString()}
-            </p>
-
+                <img class="coin-logo" src="${coin.image}" alt="${coin.name}">
+                <div>
+                    <h2 class="coin-name">${coin.name}</h2>
+                    <p class="coin-symbol">${coin.symbol.toUpperCase()}</p>
+                </div>
             </div>
 
+            <div class="coin-price">
+                <h3>$${Number(coin.current_price).toLocaleString()}</h3>
+                <span class="${changeClass}">
+                    ${change.toFixed(2)}%
+                </span>
+            </div>
+
+            <div class="coin-stats">
+                <p>🏆 Rank #${coin.market_cap_rank}</p>
+                <p>💰 ${formatMarketCap(coin.market_cap)}</p>
+                <p>📈 High $${Number(coin.high_24h).toLocaleString()}</p>
+                <p>📉 Low $${Number(coin.low_24h).toLocaleString()}</p>
+            </div>
+
+            <canvas id="${coin.id}-chart" class="sparkline" width="220" height="60"></canvas>
         `;
 
-        // Sparkline Chart
-
-let chartData = coin.sparkline_in_7d.price;
-
-let min = Math.min(...chartData);
-let max = Math.max(...chartData);
-
-let points = chartData.map((price, index) => {
-
-    let x = (index / (chartData.length - 1)) * 100;
-
-    let y = 100 - ((price - min) / (max - min)) * 100;
-
-    return `${x},${y}`;
-
-}).join(" ");
-        card.innerHTML += `
-    <canvas
-        class="sparkline"
-        id="${coin.id}-chart">
-    </canvas>
-`;
-
         container.appendChild(card);
-        if (coin.sparkline_in_7d && coin.sparkline_in_7d.price) {
-    createSparkline(
-        `${coin.id}-chart`,
-        coin.sparkline_in_7d.price
-    );
+
+        if (coin.sparkline_in_7d && coin.sparkline_in_7d.price && typeof createSparkline === "function") {
+            requestAnimationFrame(()=>{
+                createSparkline(`${coin.id}-chart`, coin.sparkline_in_7d.price);
+            });
         }
-
     });
-
 }
 
-
-// Market Cap Format
-
 function formatMarketCap(value){
+    value = Number(value || 0);
 
-    if(value >= 1e12){
+    if(value >= 1e12) return "$" + (value/1e12).toFixed(2) + " T";
+    if(value >= 1e9) return "$" + (value/1e9).toFixed(2) + " B";
+    if(value >= 1e6) return "$" + (value/1e6).toFixed(2) + " M";
+    if(value >= 1e3) return "$" + (value/1e3).toFixed(2) + " K";
 
-        return (value / 1e12).toFixed(2) + "T";
-
-    }
-
-    if(value >= 1e9){
-
-        return (value / 1e9).toFixed(2) + "B";
-
-    }
-
-    if(value >= 1e6){
-
-        return (value / 1e6).toFixed(2) + "M";
-
-    }
-
-    return value;
-
+    return "$" + value.toLocaleString();
 }
