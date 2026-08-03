@@ -1,101 +1,76 @@
-console.log("DETAILS JS LOADED");
-
 // =========================
-// Trade Orbit V6 - details.js
+// Trade Orbit V8 - details.js
 // =========================
 
 let selectedCoin = null;
-let chartRefreshInterval = null;
+let liveTimer = null;
 
-// Open Coin Details
-function openCoinDetails(coin) {
-
+function openCoinDetails(coin){
     selectedCoin = coin;
 
     const modal = document.getElementById("coin-modal");
-    if (!modal) return;
-
-    document.getElementById("detail-name").innerHTML =
-        coin.name + " (" + coin.symbol.toUpperCase() + ")";
-
-    document.getElementById("detail-price").innerHTML =
-        "$" + coin.current_price.toLocaleString();
-
-    document.getElementById("detail-change").innerHTML =
-        coin.price_change_percentage_24h.toFixed(2) + "%";
-
-    document.getElementById("detail-marketcap").innerHTML =
-        "$" + coin.market_cap.toLocaleString();
-
-    document.getElementById("detail-volume").innerHTML =
-        "$" + coin.total_volume.toLocaleString();
-
-    document.getElementById("detail-rank").innerHTML =
-        "#" + coin.market_cap_rank;
+    if(!modal) return;
 
     modal.style.display = "flex";
 
-    // First chart load
-    loadCandlestickData(coin.id);
-    startLivePrice(coin.id);
+    updateCoinDetails(coin);
 
-    // Stop previous refresh
-    if (chartRefreshInterval) {
-        clearInterval(chartRefreshInterval);
+    if(typeof loadCandlestickData === "function"){
+        loadCandlestickData(coin.id);
     }
 
-    // Refresh every 15 seconds
-    chartRefreshInterval = setInterval(() => {
-        if (selectedCoin) {
-            loadCandlestickData(selectedCoin.id);
-        }
-    }, 15000);
+    startLivePrice();
 }
 
-// Fetch Candlestick Data
-async function loadCandlestickData(coinId) {
-
-    try {
-
-        const response = await fetch(
-            `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=7`
-        );
-
-        const ohlc = await response.json();
-
-        console.log("OHLC DATA:", ohlc);
-
-        const candleData = ohlc.map(item => ({
-            time: Math.floor(item[0] / 1000),
-            open: item[1],
-            high: item[2],
-            low: item[3],
-            close: item[4]
-        }));
-
-        createCandlestickChart(candleData);
-
-    } catch (error) {
-
-        console.log("Chart Error:", error);
-
-    }
-
-}
-
-// Close Modal
-function closeCoinDetails() {
+function closeCoinDetails(){
     stopLivePrice();
 
     const modal = document.getElementById("coin-modal");
-
-    if (modal) {
+    if(modal){
         modal.style.display = "none";
     }
 
-    if (chartRefreshInterval) {
-        clearInterval(chartRefreshInterval);
-        chartRefreshInterval = null;
-    }
+    selectedCoin = null;
+}
 
+function updateCoinDetails(coin){
+
+    setValue("detail-name", coin.name);
+    setValue("detail-symbol", coin.symbol.toUpperCase());
+    setValue("detail-price", "$" + Number(coin.current_price).toLocaleString());
+    setValue("detail-marketcap", formatMarketCap(coin.market_cap));
+    setValue("detail-high", "$" + Number(coin.high_24h).toLocaleString());
+    setValue("detail-low", "$" + Number(coin.low_24h).toLocaleString());
+    setValue("detail-change", (coin.price_change_percentage_24h || 0).toFixed(2) + "%");
+}
+
+function startLivePrice(){
+
+    stopLivePrice();
+
+    liveTimer = setInterval(()=>{
+
+        if(!selectedCoin) return;
+        if(typeof cryptoData === "undefined") return;
+
+        const latest = cryptoData.find(c=>c.id===selectedCoin.id);
+
+        if(!latest) return;
+
+        selectedCoin = latest;
+        updateCoinDetails(latest);
+
+    },5000);
+}
+
+function stopLivePrice(){
+    if(liveTimer){
+        clearInterval(liveTimer);
+        liveTimer = null;
+    }
+}
+
+function setValue(id,value){
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
 }
