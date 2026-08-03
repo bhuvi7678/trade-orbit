@@ -8,7 +8,9 @@ function createSparkline(canvasId,prices){
  if(sparklineCharts[canvasId]) sparklineCharts[canvasId].destroy();
  sparklineCharts[canvasId]=new Chart(c,{type:'line',data:{labels:prices.map((_,i)=>i),datasets:[{data:prices,borderWidth:2,pointRadius:0,tension:.35,borderColor:prices.at(-1)>=prices[0]?'#22c55e':'#ef4444'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
 }
-function createCandlestickChart(data){
+function console.log("Lightweight Version:", window.LightweightCharts);
+console.log("Container:", document.getElementById("candlestick-chart"));
+createCandlestickChart(data){
  const container=document.getElementById('candlestick-chart');
  if(!container||!window.LightweightCharts) return;
  currentCandleData=[...(data||[])];
@@ -40,6 +42,7 @@ async function loadCandlestickData(coinId) {
         );
 
         const data = await response.json();
+         console.log("OHLC Data:", data);
 
         const candles = data.map(c => ({
             time: Math.floor(c[0] / 1000),
