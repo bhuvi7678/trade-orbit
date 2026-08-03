@@ -49,5 +49,8 @@ function updateTime() {
   }
 }
 
+// First Load
+fetchCryptoData();
+
 // Auto Refresh (30 sec)
 setInterval(fetchCryptoData, 30000);
