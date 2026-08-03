@@ -1,4 +1,5 @@
 // Trade Orbit V8 chart.js
+alert("NEW chart.js Loaded");
 const sparklineCharts={};
 let candleChart=null,candleSeries=null,currentCandleData=[];
 
