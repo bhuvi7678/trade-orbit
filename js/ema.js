@@ -1,109 +1,71 @@
 // =========================
-// Trade Orbit V7 - ema.js
+// Trade Orbit V8 - ema.js
 // =========================
-console.log("EMA FILE START");
-console.log("EMA.JS LOADED");
 
-
-// Calculate EMA
 function calculateEMA(data, period) {
-
-    if (!data || data.length < period) {
-        return [];
-    }
-
-
-    let ema = [];
+    if (!Array.isArray(data) || data.length < period) return [];
 
     const multiplier = 2 / (period + 1);
+    const result = [];
 
-
-    // First EMA = SMA
-    let sma = 0;
+    let ema = 0;
 
     for (let i = 0; i < period; i++) {
-
-        sma += data[i].close;
-
+        ema += Number(data[i].close);
     }
 
-    sma = sma / period;
+    ema /= period;
 
-
-    ema.push({
+    result.push({
         time: data[period - 1].time,
-        value: sma
+        value: ema
     });
 
-
-    // Remaining EMA
     for (let i = period; i < data.length; i++) {
+        ema = ((Number(data[i].close) - ema) * multiplier) + ema;
 
-        const value =
-            (data[i].close - ema[ema.length - 1].value)
-            * multiplier
-            +
-            ema[ema.length - 1].value;
-
-
-        ema.push({
-
+        result.push({
             time: data[i].time,
-            value: value
-
+            value: Number(ema.toFixed(2))
         });
-
     }
 
-
-    return ema;
-
+    return result;
 }
 
-
-
-// Add EMA Lines To Chart
 function addEMA(chart, candleData) {
 
-    if (!chart || !candleData || candleData.length === 0) {
+    if (!chart || !Array.isArray(candleData) || candleData.length < 10) {
         return;
     }
 
-
-    const ema9 =
-        calculateEMA(candleData, 9);
-
-
-    const ema20 =
-        calculateEMA(candleData, 20);
-
-
-    const ema200 =
-        calculateEMA(candleData, 200);
-
-
-
-    if (typeof ema9Series !== "undefined" && ema9Series) {
-
-        ema9Series.setData(ema9);
-
+    if (!window.ema9Series) {
+        window.ema9Series = chart.addLineSeries({
+            color: "#3b82f6",
+            lineWidth: 2
+        });
     }
 
-
-    if (typeof ema20Series !== "undefined" && ema20Series) {
-
-        ema20Series.setData(ema20);
-
+    if (!window.ema20Series) {
+        window.ema20Series = chart.addLineSeries({
+            color: "#f59e0b",
+            lineWidth: 2
+        });
     }
 
-
-    if (typeof ema200Series !== "undefined" && ema200Series) {
-
-        ema200Series.setData(ema200);
-
+    if (!window.ema200Series) {
+        window.ema200Series = chart.addLineSeries({
+            color: "#a855f7",
+            lineWidth: 2
+        });
     }
 
+    window.ema9Series.setData(calculateEMA(candleData, 9));
+    window.ema20Series.setData(calculateEMA(candleData, 20));
+
+    if (candleData.length >= 200) {
+        window.ema200Series.setData(calculateEMA(candleData, 200));
+    }
 }
-
 
 console.log("EMA Engine Ready");
