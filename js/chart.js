@@ -33,7 +33,8 @@ function destroyCandlestickChart(){if(candleChart){candleChart.remove();candleCh
 // Load Candlestick Data
 // =========================
 
-async function loadCandlestickData(coinId) {
+async function alert("Candles Loaded: " + data.length);
+                          loadCandlestickData(coinId) {
 
     try {
 
@@ -52,7 +53,8 @@ async function loadCandlestickData(coinId) {
             close: c[4]
         }));
 
-        createCandlestickChart(candles);
+       alert("Chart Function Called");
+     createCandlestickChart(candles);
 
     } catch (err) {
 
