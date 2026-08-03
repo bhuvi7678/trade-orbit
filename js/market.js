@@ -1,60 +1,61 @@
 // =========================
-// Trade Orbit V4 - market.js
+// Trade Orbit V8 - market.js
 // =========================
 
-function updateMarketOverview(coins){
+function updateMarketOverview(coins) {
 
-    if(!coins || coins.length === 0) return;
+    if (!Array.isArray(coins) || coins.length === 0) return;
 
+    const totalElement = document.getElementById("total-coins");
+    const gainerElement = document.getElementById("top-gainer");
+    const loserElement = document.getElementById("top-loser");
 
-    // Sort by 24h change
+    if (totalElement) {
+        totalElement.textContent = coins.length;
+    }
 
-    let sortedCoins = [...coins].sort(
-
-        (a,b) =>
-        b.price_change_percentage_24h -
-        a.price_change_percentage_24h
-
+    const valid = coins.filter(c =>
+        typeof c.price_change_percentage_24h === "number"
     );
 
+    if (valid.length === 0) return;
 
-    let topGainer = sortedCoins[0];
+    const sorted = [...valid].sort(
+        (a, b) =>
+            b.price_change_percentage_24h -
+            a.price_change_percentage_24h
+    );
 
-    let topLoser = sortedCoins[sortedCoins.length - 1];
+    const topGainer = sorted[0];
+    const topLoser = sorted[sorted.length - 1];
 
-
-    const gainer =
-    document.getElementById("top-gainer");
-
-
-    const loser =
-    document.getElementById("top-loser");
-
-
-    if(gainer){
-
-        gainer.innerHTML =
-        `${topGainer.name} +${topGainer.price_change_percentage_24h.toFixed(2)}%`;
-
+    if (gainerElement) {
+        gainerElement.innerHTML = `
+            <strong>${topGainer.name}</strong><br>
+            <span class="positive">
+                +${topGainer.price_change_percentage_24h.toFixed(2)}%
+            </span>
+        `;
     }
 
-
-    if(loser){
-
-        loser.innerHTML =
-        `${topLoser.name} ${topLoser.price_change_percentage_24h.toFixed(2)}%`;
-
+    if (loserElement) {
+        loserElement.innerHTML = `
+            <strong>${topLoser.name}</strong><br>
+            <span class="negative">
+                ${topLoser.price_change_percentage_24h.toFixed(2)}%
+            </span>
+        `;
     }
+}
 
+function getTopGainers(coins, limit = 5) {
+    return [...coins]
+        .sort((a,b)=>b.price_change_percentage_24h-a.price_change_percentage_24h)
+        .slice(0, limit);
+}
 
-    const total =
-    document.getElementById("total-coins");
-
-
-    if(total){
-
-        total.innerHTML = coins.length;
-
-    }
-
+function getTopLosers(coins, limit = 5) {
+    return [...coins]
+        .sort((a,b)=>a.price_change_percentage_24h-b.price_change_percentage_24h)
+        .slice(0, limit);
 }
