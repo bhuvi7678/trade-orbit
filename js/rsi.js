@@ -2,24 +2,34 @@
 // Trade Orbit V8 - rsi.js
 // =========================
 
-let rsiSeries = null;
+const RSI_PERIOD = 14;
 
-function calculateRSI(candleData, period = 14) {
+// =========================
+// Calculate RSI
+// =========================
 
-    if (!Array.isArray(candleData) || candleData.length <= period) {
+function calculateRSI(candles, period = RSI_PERIOD) {
+
+    if (!candles || candles.length <= period) {
         return [];
     }
 
-    const closes = candleData.map(c => Number(c.close));
-    const output = [];
+    const rsi = [];
 
     let gains = 0;
     let losses = 0;
 
+    // Initial Average
     for (let i = 1; i <= period; i++) {
-        const diff = closes[i] - closes[i - 1];
-        if (diff >= 0) gains += diff;
-        else losses += Math.abs(diff);
+
+        const change = candles[i].close - candles[i - 1].close;
+
+        if (change >= 0) {
+            gains += change;
+        } else {
+            losses += Math.abs(change);
+        }
+
     }
 
     let avgGain = gains / period;
@@ -27,51 +37,98 @@ function calculateRSI(candleData, period = 14) {
 
     let rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
 
-    output.push({
-        time: candleData[period].time,
+    rsi.push({
+
+        time: candles[period].time,
+
         value: Number((100 - (100 / (1 + rs))).toFixed(2))
+
     });
 
-    for (let i = period + 1; i < closes.length; i++) {
-        const diff = closes[i] - closes[i - 1];
-        const gain = diff > 0 ? diff : 0;
-        const loss = diff < 0 ? Math.abs(diff) : 0;
+    // Remaining RSI
+    for (let i = period + 1; i < candles.length; i++) {
 
-        avgGain = ((avgGain * (period - 1)) + gain) / period;
-        avgLoss = ((avgLoss * (period - 1)) + loss) / period;
+        const change = candles[i].close - candles[i - 1].close;
+
+        const gain = change > 0 ? change : 0;
+        const loss = change < 0 ? Math.abs(change) : 0;
+
+        avgGain =
+            ((avgGain * (period - 1)) + gain) / period;
+
+        avgLoss =
+            ((avgLoss * (period - 1)) + loss) / period;
 
         rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
 
-        output.push({
-            time: candleData[i].time,
+        rsi.push({
+
+            time: candles[i].time,
+
             value: Number((100 - (100 / (1 + rs))).toFixed(2))
+
         });
+
     }
 
-    return output;
+    return rsi;
+
 }
 
-function addRSI(candleData) {
+// =========================
+// Add RSI
+// =========================
 
-    if (!window.candleChart) return;
-    if (!Array.isArray(candleData) || candleData.length < 15) return;
+function addRSI(candles) {
 
-    if (!rsiSeries) {
-        rsiSeries = window.candleChart.addLineSeries({
-            color: "#14b8a6",
-            lineWidth: 2,
-            priceScaleId: "rsi"
-        });
+    const rsi = calculateRSI(candles);
 
-        window.candleChart.priceScale("rsi").applyOptions({
-            scaleMargins: {
-                top: 0.8,
-                bottom: 0
-            }
-        });
+    console.log("RSI:", rsi);
+
+    return rsi;
+
+}
+
+// =========================
+// Latest RSI
+// =========================
+
+function getLatestRSI(candles) {
+
+    const rsi = calculateRSI(candles);
+
+    if (!rsi.length) return null;
+
+    return rsi[rsi.length - 1].value;
+
+}
+
+// =========================
+// RSI Signal
+// =========================
+
+function getRSISignal(candles) {
+
+    const value = getLatestRSI(candles);
+
+    if (value === null) {
+
+        return "WAIT";
+
     }
 
-    rsiSeries.setData(calculateRSI(candleData));
-}
+    if (value >= 70) {
 
-console.log("RSI Engine Ready");
+        return "SELL";
+
+    }
+
+    if (value <= 30) {
+
+        return "BUY";
+
+    }
+
+    return "HOLD";
+
+}
