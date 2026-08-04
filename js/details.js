@@ -3,99 +3,155 @@
 // =========================
 
 let selectedCoin = null;
-let liveTimer = null;
+let livePriceTimer = null;
 
-function openCoinDetails(coin){
+// =========================
+// Open Coin Details
+// =========================
+
+function openCoinDetails(coin) {
+
+    if (!coin) return;
+
     selectedCoin = coin;
 
     const modal = document.getElementById("coin-modal");
-    if(!modal) return;
+
+    if (!modal) return;
 
     modal.style.display = "flex";
 
-   function updateCoinDetails(coin){
+    updateCoinDetails(coin);
 
-    setValue("detail-name", coin.name);
-    setValue("detail-price", "$" + Number(coin.current_price).toLocaleString());
-
-    setValue(
-        "detail-change",
-        (coin.price_change_percentage_24h || 0).toFixed(2) + "%"
-    );
-
-    setValue(
-        "detail-marketcap",
-        "$" + formatMarketCap(coin.market_cap)
-    );
-
-    setValue(
-        "detail-volume",
-        "$" + Number(coin.total_volume).toLocaleString()
-    );
-
-    setValue(
-        "detail-rank",
-        "#" + coin.market_cap_rank
-    );
-
-   } 
-
-    if(typeof loadCandlestickData === "function"){
+    if (typeof loadCandlestickData === "function") {
         loadCandlestickData(coin.id);
     }
 
     startLivePrice();
+
 }
 
-function closeCoinDetails(){
+// =========================
+// Close Modal
+// =========================
+
+function closeCoinDetails() {
+
     stopLivePrice();
 
+    if (typeof destroyCandlestickChart === "function") {
+        destroyCandlestickChart();
+    }
+
     const modal = document.getElementById("coin-modal");
-    if(modal){
+
+    if (modal) {
         modal.style.display = "none";
     }
 
     selectedCoin = null;
+
 }
 
-function updateCoinDetails(coin){
+// =========================
+// Update Coin Info
+// =========================
 
-    setValue("detail-name", coin.name);
-    setValue("detail-symbol", coin.symbol.toUpperCase());
-    setValue("detail-price", "$" + Number(coin.current_price).toLocaleString());
-    setValue("detail-marketcap", formatMarketCap(coin.market_cap));
-    setValue("detail-high", "$" + Number(coin.high_24h).toLocaleString());
-    setValue("detail-low", "$" + Number(coin.low_24h).toLocaleString());
-    setValue("detail-change", (coin.price_change_percentage_24h || 0).toFixed(2) + "%");
+function updateCoinDetails(coin) {
+
+    if (!coin) return;
+
+    setText("detail-name", coin.name);
+
+    setText("detail-price",
+        "$" + Number(coin.current_price).toLocaleString());
+
+    setText("detail-change",
+        (coin.price_change_percentage_24h || 0).toFixed(2) + "%");
+
+    setText("detail-marketcap",
+        formatMarketCap(coin.market_cap));
+
+    setText("detail-volume",
+        "$" + Number(coin.total_volume).toLocaleString());
+
+    setText("detail-rank",
+        "#" + coin.market_cap_rank);
+
 }
 
-function startLivePrice(){
+// =========================
+// Live Update
+// =========================
+
+function startLivePrice() {
 
     stopLivePrice();
 
-    liveTimer = setInterval(()=>{
+    livePriceTimer = setInterval(() => {
 
-        if(!selectedCoin) return;
-        if(typeof cryptoData === "undefined") return;
+        if (!selectedCoin) return;
 
-        const latest = cryptoData.find(c=>c.id===selectedCoin.id);
+        if (typeof cryptoData === "undefined") return;
 
-        if(!latest) return;
+        const latest = cryptoData.find(c => c.id === selectedCoin.id);
+
+        if (!latest) return;
 
         selectedCoin = latest;
+
         updateCoinDetails(latest);
 
-    },5000);
+    }, 5000);
+
 }
 
-function stopLivePrice(){
-    if(liveTimer){
-        clearInterval(liveTimer);
-        liveTimer = null;
+// =========================
+// Stop Live Update
+// =========================
+
+function stopLivePrice() {
+
+    if (livePriceTimer) {
+
+        clearInterval(livePriceTimer);
+
+        livePriceTimer = null;
+
     }
+
 }
 
-function setValue(id,value){
+// =========================
+// Safe Text Update
+// =========================
+
+function setText(id, value) {
+
     const el = document.getElementById(id);
-    if(el) el.textContent = value;
+
+    if (el) {
+
+        el.textContent = value;
+
+    }
+
 }
+
+// =========================
+// Close on Outside Click
+// =========================
+
+window.addEventListener("click", function (e) {
+
+    const modal = document.getElementById("coin-modal");
+
+    if (!modal) return;
+
+    if (e.target === modal) {
+
+        closeCoinDetails();
+
+    }
+
+});
