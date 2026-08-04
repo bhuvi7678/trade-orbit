@@ -2,70 +2,122 @@
 // Trade Orbit V8 - ema.js
 // =========================
 
+let ema9Series = null;
+let ema20Series = null;
+let ema50Series = null;
+
+// =========================
+// Calculate EMA
+// =========================
+
 function calculateEMA(data, period) {
-    if (!Array.isArray(data) || data.length < period) return [];
+
+    if (!data || data.length < period) return [];
 
     const multiplier = 2 / (period + 1);
-    const result = [];
 
-    let ema = 0;
+    let ema = [];
+
+    let sum = 0;
 
     for (let i = 0; i < period; i++) {
-        ema += Number(data[i].close);
+        sum += data[i].close;
     }
 
-    ema /= period;
+    let previousEMA = sum / period;
 
-    result.push({
+    ema.push({
         time: data[period - 1].time,
-        value: ema
+        value: previousEMA
     });
 
     for (let i = period; i < data.length; i++) {
-        ema = ((Number(data[i].close) - ema) * multiplier) + ema;
 
-        result.push({
+        previousEMA =
+            ((data[i].close - previousEMA) * multiplier) + previousEMA;
+
+        ema.push({
             time: data[i].time,
-            value: Number(ema.toFixed(2))
+            value: Number(previousEMA.toFixed(2))
         });
+
     }
 
-    return result;
+    return ema;
+
 }
 
-function addEMA(chart, candleData) {
+// =========================
+// Draw EMA
+// =========================
 
-    if (!chart || !Array.isArray(candleData) || candleData.length < 10) {
-        return;
+function addEMA(chart, candles) {
+
+    if (!chart || !candles) return;
+
+    // Remove old EMA
+
+    if (ema9Series) {
+        chart.removeSeries(ema9Series);
+        ema9Series = null;
     }
 
-    if (!window.ema9Series) {
-        window.ema9Series = chart.addLineSeries({
-            color: "#3b82f6",
-            lineWidth: 2
-        });
+    if (ema20Series) {
+        chart.removeSeries(ema20Series);
+        ema20Series = null;
     }
 
-    if (!window.ema20Series) {
-        window.ema20Series = chart.addLineSeries({
-            color: "#f59e0b",
-            lineWidth: 2
-        });
+    if (ema50Series) {
+        chart.removeSeries(ema50Series);
+        ema50Series = null;
     }
 
-    if (!window.ema200Series) {
-        window.ema200Series = chart.addLineSeries({
-            color: "#a855f7",
-            lineWidth: 2
-        });
-    }
+    // Create EMA Lines
 
-    window.ema9Series.setData(calculateEMA(candleData, 9));
-    window.ema20Series.setData(calculateEMA(candleData, 20));
+    ema9Series = chart.addLineSeries({
 
-    if (candleData.length >= 200) {
-        window.ema200Series.setData(calculateEMA(candleData, 200));
-    }
+        color: "#FFD700",
+
+        lineWidth: 2,
+
+        title: "EMA 9"
+
+    });
+
+    ema20Series = chart.addLineSeries({
+
+        color: "#00BFFF",
+
+        lineWidth: 2,
+
+        title: "EMA 20"
+
+    });
+
+    ema50Series = chart.addLineSeries({
+
+        color: "#FF00FF",
+
+        lineWidth: 2,
+
+        title: "EMA 50"
+
+    });
+
+    // Calculate
+
+    const ema9 = calculateEMA(candles, 9);
+
+    const ema20 = calculateEMA(candles, 20);
+
+    const ema50 = calculateEMA(candles, 50);
+
+    // Draw
+
+    ema9Series.setData(ema9);
+
+    ema20Series.setData(ema20);
+
+    ema50Series.setData(ema50);
+
 }
-
-console.log("EMA Engine Ready");
