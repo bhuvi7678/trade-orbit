@@ -10,12 +10,52 @@ function createSparkline(canvasId,prices){
  sparklineCharts[canvasId]=new Chart(c,{type:'line',data:{labels:prices.map((_,i)=>i),datasets:[{data:prices,borderWidth:2,pointRadius:0,tension:.35,borderColor:prices.at(-1)>=prices[0]?'#22c55e':'#ef4444'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
 }
 function createCandlestickChart(data){
+
+    const container = document.getElementById("candlestick-chart");
+
+    if(!container){
+        console.error("Container not found");
+        return;
+    }
+
+    if(!window.LightweightCharts){
+        console.error("LightweightCharts not loaded");
+        return;
+    }
+
+    console.log("Container OK");
+
+    currentCandleData = [...(data || [])];
+
+    if(candleChart){
+        candleChart.remove();
+    }
+
+    candleChart = LightweightCharts.createChart(container,{
+        width:container.clientWidth,
+        height:420
+    });
+
+    console.log("Chart Created");
+
+    console.log("addCandlestickSeries =", typeof candleChart.addCandlestickSeries);
+
+    candleSeries = candleChart.addCandlestickSeries();
+
+    candleSeries.setData(currentCandleData);
+
+    candleChart.timeScale().fitContent();
+
+    console.log("Candles Loaded");
+}
  const container=document.getElementById('candlestick-chart');
  if(!container||!window.LightweightCharts) return;
  currentCandleData=[...(data||[])];
  if(candleChart) candleChart.remove();
  candleChart=LightweightCharts.createChart(container,{width:container.clientWidth,height:420});
- candleSeries=candleChart.addCandlestickSeries();
+ candleSeries=candleChart.console.log("createChart OK");
+  addCandlestickSeries();
+  console.log("addCandlestickSeries exists =", typeof candleChart.addCandlestickSeries);
  candleSeries.setData(currentCandleData);
  if(typeof addEMA==='function') addEMA(candleChart,currentCandleData);
  if(typeof addRSI==='function') addRSI(currentCandleData);
