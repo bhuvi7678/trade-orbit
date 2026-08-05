@@ -49,18 +49,7 @@ function createCandlestickChart(data){
     console.log("Candles Loaded");
 }
  const container=document.getElementById('candlestick-chart');
- if(!container||!window.LightweightCharts) return;
- currentCandleData=[...(data||[])];
- if(candleChart) candleChart.remove();
- candleChart=LightweightCharts.createChart(container,{width:container.clientWidth,height:420});
- candleSeries=candleChart.console.log("createChart OK");
-  addCandlestickSeries();
-  console.log("addCandlestickSeries exists =", typeof candleChart.addCandlestickSeries);
- candleSeries.setData(currentCandleData);
- if(typeof addEMA==='function') addEMA(candleChart,currentCandleData);
- if(typeof addRSI==='function') addRSI(currentCandleData);
- candleChart.timeScale().fitContent();
-}
+
 function updateCandlestickChart(data){
  currentCandleData=[...(data||[])];
  if(candleSeries) candleSeries.setData(currentCandleData);
