@@ -7,9 +7,10 @@ function createSparkline(canvasId,prices){
  const c=document.getElementById(canvasId);
  if(!c||!prices||!window.Chart)return;
  if(sparklineCharts[canvasId]) sparklineCharts[canvasId].destroy();
- sparklineCharts[canvasId]=new Chart(c,{type:'line',data:{labels:prices.map((_,i)=>i),datasets:[{data:prices,borderWidth:2,pointRadius:0,tension:.35 borderColor: prices[prices.length - 1] >= prices[0]
+ sparklineCharts[canvasId]=new Chart(c,{type:'line',data:{labels:prices.map((_,i)=>i),datasets:[{data:prices,borderWidth:2,pointRadius:0,tension:0.35 borderColor: prices[prices.length - 1] >= prices[0]
     ? "#22c55e"
-    : "#ef4444" }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+    : "#ef4444" ,
+     fill : false                                                                                          }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
 }
 function createCandlestickChart(data){
 
